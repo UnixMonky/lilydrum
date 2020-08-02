@@ -26,6 +26,7 @@
 
 #(ly:set-option 'relative-includes #t)
 
+\include "lib/format_page.ily"
 \include "lib/layout_tweaks.ily"
 \include "lib/musical_functions.ily"
 \include "lib/embellishments.ily"

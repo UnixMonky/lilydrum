@@ -1,91 +1,66 @@
 % This file compiles with at least version 2.19.80
-\version "2.19.80"
+\version "2.20.0"
 
 % Include lilydrum before any music is defined
 % it *will* complain otherwise about the d's and the g's
 \include "lilydrum.ly"
 
-% Give it a title with standard settings
-\header { title = "Standards 6/8" }
+\paper { 
+%  annotate-spacing = ##t 
+%  between-system-padding = #1.0
+%  between-system-space = #0.1
+  ragged-last-bottom = ##f
+  ragged-bottom = ##f
+}
 
-% Change Options for printing
-\layout {
-  % Remove the indent in the first system
-  indent = 0.0
+\header{
+    title = "Scotland the Brave"
+	  subtitle = "Modified from PPBSO"
+
+	  instrument = "Snare Drum"
+	  meter = "2/4 March"
+	  dedication = "Those who are about to .ly salute you."
+
+	  composer = "SAPBD"
+	  arranger = "Matt Huber"
+	  today = "August 2nd, 2020"
 }
 
 % Start the score
 \score {
-		% We want a drumstaff regularly used for pipebands
-		\new PipeBandDrumStaff {
-			% Signal lilypond we will be using drumnotation
-			\drummode {
-				% The time signature is 6/8
-				\time 6/8
-				% Start the bar as a repeat with an anacrusis
-				\repeat volta 2 {
-					\partial 8
-					% Regularly the format is A - B - A - C
-					% so we use an unfolded repeat with alternatives
-					% to keep us from writing A twice
-					% You could also use variables here
-					\repeat unfold 2 {
-						% Start with a seven roll
-						% Then continue with a few drags
-						% Normally beaming does not need to specified
-						% Except for drags, they break the automatic beaming
-						d8:32( |
-						g8.)[ g16 \drag d8]	d8.[ d16 \drag g8] |
-						g8.[ \drag d16 d8]	d8.[ d16 \drag g8] |
-					} \alternative {
-						% The first alternative
-						{
-							% The next part is played in unison the first time through
-							\tutti {
-								\flam d8. d16 g8	d4.:32( |
-								d8.) g16 d8	\flam g4
-							}
-						}
-						% The second alternative
-						{
-						  % This part is also played in unison the first time through
-							\tutti{
-								\flam d8. d16:64( d8)	\flam d8. d16 \flam g8 |
-								d8.:32( d16) \flam g8	\flam d4
-							}
-						}
-					}
-					% Pad the score a bit so we can make sure we are at the end of a bar
-					% This spacing note is of the time we used for the upbeat
-					s8 |
-				}
+	% We want a drumstaff regularly used for pipebands
+	\new PipeBandDrumStaff {
+		% Signal lilypond we will be using drumnotation
+		\drummode {
+			\time 2/4
 
-				% Make sure there is a newline for the next few measures
-				\break
+			\rmark
+			\bar ".|:" \partial 8 rr16. ll32
+			\zz rr16.( rr32) ll16. \zz rr32( rr16.) ll32 \zz rr16.( rr32) ll16. \zz rr32( rr16.) ll32 \lf rr8 \zz rr8( 
+			\tuplet 3/2 { ll16) rr ll } rr16.-> ll32 \tuplet 3/2 { rr16 ll rr } ll16.-> ll32 rr16. ll32-> rr32 ll rr ll rr8-> rr16. ll32 | \break
+			\zz rr16.( rr32) ll16. \zz rr32( rr16.) ll32 \zz rr16.( rr32) ll16. \zz rr32( rr16.) ll32 \lf rr8 \zz rr8(
+			\tuplet 3/2 { ll16) rr ll } rr16.-> ll32 rr16. \rf ll32 rr16. ll32 \lf rr8 \zz rr8( ll) \bar ":.|.:" \break
 
-				% Let's try again with another line
-				% This one containing a few triplets
-				\repeat volta 2 {
-					\partial 8
-					\repeat unfold 2 {
-						d8:32( |
-						\tuplet 3/2 { g8) d g } \flam d8		\tuplet 3/2 { d8 g d } \flam g8 |
-						d16 g d-> g d g  \flam d8 g8. d16 |
+			\rmark
+			rr16. ll32 | \set Score.currentBarNumber = #1
+			\zz rr8(-> \zz ll8)(-> rr16.->) ll32 rr16. ll32 \zz rr8(-> \zz ll8)(-> rr8)-> \zz rr8(
+			\tuplet 3/2 { ll16) rr ll } rr16.-> ll32 \tuplet 3/2 { rr16 ll rr } ll16.-> ll32 rr16. ll32-> rr32 ll rr ll rr8-> rr16. ll32 | \break
+			\zz rr8(-> \zz ll8)(-> rr16.->) ll32 rr16. ll32 \zz rr8(-> \zz ll8)(-> rr8)-> \zz rr8(
+			\tuplet 3/2 { ll16) rr ll } rr16.-> ll32 rr16. \rf ll32 rr16. ll32 \lf rr8 \zz rr8( ll) \bar ":.|.:" \break
+				
+			\rmark
+			rr16. ll32 | \set Score.currentBarNumber = #1
+			\lz rr8 ll16. rr32 \rz ll8 rr16. ll32 r16. ll32-> rr16. ll32 \lz rr8 \zz rr8( |
+			\tuplet 3/2 { ll16) rr ll } rr16.-> ll32 \tuplet 3/2 { rr16 ll rr } ll16.-> ll32 rr16. ll32-> rr32 ll rr ll rr8-> rr16. ll32 | \break
+			\lz rr8 ll16. rr32 \rz ll8 rr16. ll32 r16. ll32-> rr16. ll32 \lz rr8 \zz rr8( |
+			\tuplet 3/2 { ll16) rr ll } rr16.-> ll32 rr16. \rf ll32 rr16. ll32 \lf rr8 \zz rr8( ll) \bar ":.|.:" \break
 
-					} \alternative {
-						% We don't actually need the outermost braces of the alternatives used in the first line
-						\tutti {
-							\flam d8. d16 g8	d4.:32( |
-							d8.) g16 d8	\flam g4
-						}
-
-						\tutti{
-							\flam d8. d16:64( d8)	\flam d8. d16 \flam g8 |
-							d8.:32( d16) \flam g8	\flam d4
-						}
-					}
-					s8 |
-				}
-			}
+			\rmark
+			\zz rr8( | \set Score.currentBarNumber = #1
+			ll8.) ll16 \zz rr8( ll) rr \zz rr( ll) \zz rr(
+			\tuplet 3/2 { ll16) rr ll } rr16.-> ll32 \tuplet 3/2 { rr16 ll rr } ll16.-> ll32 rr16. ll32-> rr32 ll rr ll rr8-> \zz rr8( | \break
+			ll8.) ll16 \zz rr8( ll) rr \zz rr( ll) \zz rr(
+			\tuplet 3/2 { ll16) rr ll } rr16.-> ll32 rr16. \rf ll32 rr16. ll32 \lf rr8 \zz rr8( ll) \bar ":|." \break
 		}
 	}
+}

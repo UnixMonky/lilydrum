@@ -64,29 +64,8 @@ dynLine = #(define-music-function
 	#})
 
 % unison brackets
-% TODO: a little 'u'
-% TODO: open ended brackets(\odr,\ofr)
-%unisonbracket = {
-%		\once \override TextSpanner.style = #'line
-%		\once \override TextSpanner #'to-barline = ##t
-%		\once \override TextSpanner.bound-details.left.text = \markup {
-%			\combine
-%				\combine
-%					\draw-line #'(0 . -1)
-%					\draw-line #'(1 . 0)
-%				\translate #'(1 . -0.5 ) \whiteout \box "u"
-%		}
-%		\once \override TextSpanner.bound-details.right.text = \markup { \draw-line #'(0 . -1) }
-%		\once \override TextSpanner.bound-details.right.attach-dir = #RIGHT
-%}
-%dr = { \unisonbracket	<>\="unison"\startTextSpan }
-%fr = { <>\="unison"\stopTextSpan }
-%odr = { \unisonbracket	<>\="unison"\startTextSpan }
-%ofr = { <>\="unison"\stopTextSpan }
-dr = #(define-event-function (parser location) () #{ -\tag #'tutti \startGroup #})
-fr = #(define-event-function (parser location) () #{ -\tag #'tutti \stopGroup #})
-odr = #(define-event-function (parser location) () #{ -\tag #'tutti \startGroup #})
-ofr = #(define-event-function (parser location) () #{ -\tag #'tutti \stopGroup #})
+uni  = #(define-event-function (parser location) () #{ -\tag #'tutti \startGroup #})
+lead = #(define-event-function (parser location) () #{ -\tag #'tutti \stopGroup #})
 
 #(define (allbutlastnote mus)
    "Reverse the elements, Pop of (cdr) the first element, Reverse again, put it in a SequentialMusic"
@@ -104,9 +83,9 @@ ofr = #(define-event-function (parser location) () #{ -\tag #'tutti \stopGroup #
 tutti = #(define-music-function (music) (ly:music?)
 	#{
 		\override HorizontalBracket.connect-to-neighbor = #'(#t #t)
-		<>\dr
+		<>\uni
 		#(allbutlastnote music)
-		<>\fr
+		<>\lead
 		#(lastnote music)
 		\revert HorizontalBracket.connect-to-neighbor
 	#})

@@ -6,8 +6,8 @@
 %	"g" for the left hand ("gauche")
 drumPitchNames =
 #(append '(
-	(d . right-hand)
-	(g . left-hand)
+	(rr . right-hand)
+	(ll . left-hand)
 	(right . right-hand)
 	(left . left-hand)
 	)
@@ -38,12 +38,12 @@ drumPitchNames =
 
 		% stems
 		\override Stem.direction = #DOWN		% stems down
-		\override Stem.length = #8.5			% unbeamed stems length
+		\override Stem.length = #8			% unbeamed stems length
 		\override Stem.stemlet-length = #1	% short stem length
 
 		% beams
 		\override Beam.beam-thickness = #0.4		% beam-thickness
-		\override Beam.positions = #'(-3.8 . -3.8)	% fix beams on one height
+		\override Beam.positions = #'(-4.5 . -4.5)	% fix beams on one height
 
 		% slurs and ties
 		\override Slur.direction = #UP	% Slurs on top

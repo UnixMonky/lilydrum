@@ -20,41 +20,67 @@ drumgrace = #(define-music-function (parser location notes ) ( ly:music? ) #{
 	\stemNeutral
 #})
 
+gracebuzz = {
+  \once \override Stem #'stencil =
+    #(lambda (grob)
+       (let* ((x-parent (ly:grob-parent grob X))
+              (is-rest? (ly:grob? (ly:grob-object x-parent 'rest))))
+         (if is-rest?
+             empty-stencil
+             (ly:stencil-combine-at-edge
+              (ly:stem::print grob)
+              Y
+              (- (ly:grob-property grob 'direction))
+              (grob-interpret-markup grob
+                                     (markup #:center-align #:fontsize 2
+                                             #:musicglyph "z"))
+              -1.8))))
+}
+
 % Flams
-flamd =   \drummode { \drumgrace { g8 } }			% Flam right
-flamg =   \drummode { \drumgrace { d8 } }			% Flam left
-flamddr = \drummode { \drumgrace { g8\dr } }		% Flam right with start repeat
-flamgdr = \drummode { \drumgrace { d8\dr } }		% Flam left  with start repeat
+rf =   \drummode { \drumgrace { rr8 } }			% Flam right
+lf =   \drummode { \drumgrace { ll8 } }			% Flam left
+rfr = \drummode { \drumgrace { rr8\uni } }		% Flam right with start repeat
+lfr = \drummode { \drumgrace { ll\uni } }		% Flam left  with start repeat
 
-% Optional Flams
-optflamd =   \drummode { \drumgrace { \parenthesize g8 } }			% Optional Flam right
-optflamg =   \drummode { \drumgrace { \parenthesize d8 } }			% Optional Flam left
-optflamddr = \drummode { \drumgrace { \parenthesize g8\dr } }		% Optional Flam right with start repeat
-optflamgdr = \drummode { \drumgrace { \parenthesize d8\dr } }		% Optional Flam left  with start repeat
+% % Optional Flams
+% rfo =   \drummode { \drumgrace { \parenthesize rr8 } }			% Optional Flam right
+% lfo =   \drummode { \drumgrace { \parenthesize ll8 } }			% Optional Flam left
+% rfor = \drummode { \drumgrace { \parenthesize rr8\uni } }		% Optional Flam right with start repeat
+% lfor = \drummode { \drumgrace { \parenthesize ll8\uni } }		% Optional Flam left  with start repeat
 
-% Drags
-dragd =   \drummode { \drumgrace { g16[ g] } }		% Drag right
-dragg =   \drummode { \drumgrace { d16[ d] } }		% Drag left
-dragddr = \drummode { \drumgrace { g16[\dr g] } } 	% Drag right with start repeat
-draggdr = \drummode { \drumgrace { d16[\dr d] } } 	% Drag left  with start repeat
+% Ruffs (Open diddle flam)
+rd =   \drummode { \drumgrace { rr16[ rr] } }		% Drag right
+ld =   \drummode { \drumgrace { ll16[ ll] } }		% Drag left
+rdr = \drummode { \drumgrace { rr16[\uni rr] } } 	% Drag right with start repeat
+ldr = \drummode { \drumgrace { ll16[\uni ll] } } 	% Drag left  with start repeat
 
-% Open Drags
-odragd =   \drummode { \drumgrace { << { g16[ g] } { s16 s32^\markup { \musicglyph #"scripts.open" } } >> } }		% Open Drag right
-odragg =   \drummode { \drumgrace { << { d16[ d] } { s16 s32^\markup { \musicglyph #"scripts.open" } } >> }	}		% Open Drag left
-odragddr = \drummode { \drumgrace { << { d16[\dr d] } { s16 s32^\markup { \musicglyph #"scripts.open" } } >> } }	% Open Drag right with start repeat
-odraggdr = \drummode { \drumgrace { << { g16[\dr g] } { s16 s32^\markup { \musicglyph #"scripts.open" } } >> } }	% Open Drag left  with start repeat
+% Drags (Buzzed Flams)
+lz = \drummode { \gracebuzz \drumgrace { ll8 } }
+rz = \drummode { \gracebuzz \drumgrace { rr8 } }
+lzr = \drummode { \gracebuzz \drumgrace { ll8\uni } }
+rzr = \drummode { \gracebuzz \drumgrace { rr8\uni} }
 
-% Ruff
-ruffg =   \drummode { \drumgrace { g16[ d g] } }	% Ruff right
-ruffd =   \drummode { \drumgrace { d16[ g d] } }	% Ruff left
-ruffgdr = \drummode { \drumgrace { g16[\dr d g] } }	% Ruff right with start repeat
-ruffddr = \drummode { \drumgrace { d16[\dr g d] } }	% Ruff left  with start repeat
 
-% Swiss Ruff
-sruffg =   \drummode { \drumgrace { g16[ d d] } }		% Swiss Ruff right
-sruffd =   \drummode { \drumgrace { d16[ g g] } }		% Swiss Ruff left
-sruffgdr = \drummode { \drumgrace { g16[\dr d d] } }	% Swiss Ruff right with start repeat
-sruffddr = \drummode { \drumgrace { d16[\dr g g] } }	% Swiss Ruff left  with start repeat
+%%%
+% Buzz Rolls
+%%%
+zz = {
+  \once \override Stem #'stencil =
+    #(lambda (grob)
+       (let* ((x-parent (ly:grob-parent grob X))
+              (is-rest? (ly:grob? (ly:grob-object x-parent 'rest))))
+         (if is-rest?
+             empty-stencil
+             (ly:stencil-combine-at-edge
+              (ly:stem::print grob)
+              Y
+              (- (ly:grob-property grob 'direction))
+              (grob-interpret-markup grob
+                                     (markup #:center-align #:fontsize 1
+                                             #:musicglyph "z"))
+              -2.3))))
+}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%  Embellishment functions, automatic left or right    %%
@@ -85,24 +111,13 @@ else it will prepend @var{right}"
 )
 
 % Flam
-flam = #(autohandFunc flamg flamd)
-flamdr = #(autohandFunc flamgdr flamddr )
-
-% Optional Flam
-optflam = #(autohandFunc optflamg optflamd)
-optflamdr = #(autohandFunc optflamgdr optflamddr )
-
-% Drag
-drag = #(autohandFunc dragg dragd )
-dragdr = #(autohandFunc draggdr dragddr )
-% Open Drag
-odrag = #(autohandFunc odragg odragd )
-odragdr = #(autohandFunc odraggdr odragddr )
+fl = #(autohandFunc rf lf)
+flr = #(autohandFunc rfr lfr )
 
 % Ruff
-ruff = #(autohandFunc ruffg ruffd )
-ruffdr = #(autohandFunc ruffgdr ruffddr )
+dr = #(autohandFunc rd ld )
+drr = #(autohandFunc rdr ldr )
 
-% Swiss Ruff
-sruff = #(autohandFunc sruffg sruffd )
-sruffdr = #(autohandFunc sruffgdr sruffddr )
+% Drag
+dz = #(autohandFunc rz lz )
+dzr = #(autohandFunc rzr lzr )
